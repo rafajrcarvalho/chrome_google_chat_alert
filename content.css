@@ -1,0 +1,4 @@
+/* Hide the empty state container (illustration + text) shown when filtering by "Unread" */
+[jsname="IF2kbc"] {
+  display: none !important;
+}

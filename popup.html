@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Roboto:wght@400;500&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 320px;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #e3e3e3;
+      background: #1f1f1f;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 12px;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: 500;
+      color: #e3e3e3;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #3c4043;
+      padding: 0 20px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: #9aa0a6;
+      cursor: pointer;
+      border: none;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      transition: color 0.2s, border-color 0.2s;
+      background: none;
+    }
+
+    .tab:hover { color: #e3e3e3; }
+
+    .tab.active {
+      color: #8ab4f8;
+      border-bottom-color: #8ab4f8;
+    }
+
+    /* Tab content */
+    .tab-content {
+      display: none;
+      padding: 16px 20px 20px;
+    }
+
+    .tab-content.active { display: block; }
+
+    /* Common */
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #9aa0a6;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .separator {
+      border: none;
+      border-top: 1px solid #3c4043;
+      margin: 4px 0 16px;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 4px 0;
+    }
+
+    .toggle-row .toggle-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: #e3e3e3;
+      margin: 0;
+    }
+
+    .switch {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
+    .switch input { opacity: 0; width: 0; height: 0; }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #3c4043;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      left: 3px;
+      bottom: 3px;
+      background: #9aa0a6;
+      border-radius: 50%;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .switch input:checked + .slider { background: #004a77; }
+    .switch input:checked + .slider::before {
+      transform: translateX(20px);
+      background: #8ab4f8;
+    }
+
+    /* Color picker */
+    .color-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    input[type="color"] {
+      width: 44px;
+      height: 44px;
+      border: 2px solid #3c4043;
+      border-radius: 12px;
+      cursor: pointer;
+      background: transparent;
+      padding: 3px;
+      transition: border-color 0.2s;
+    }
+
+    input[type="color"]:hover { border-color: #8ab4f8; }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #3c4043;
+      border-radius: 8px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 14px;
+      background: #292a2d;
+      color: #e3e3e3;
+      text-transform: uppercase;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus { outline: none; border-color: #8ab4f8; }
+
+    .preview {
+      height: 36px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #3c4043;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary { background: #8ab4f8; color: #1f1f1f; }
+    .btn-primary:hover { background: #aecbfa; }
+    .btn-secondary { background: #3c4043; color: #e3e3e3; }
+    .btn-secondary:hover { background: #4a4d51; }
+
+    .status {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 12px;
+      color: #8ab4f8;
+      min-height: 16px;
+    }
+
+    /* Rules: name list */
+    .rule-section {
+      margin-bottom: 16px;
+      opacity: 1;
+      transition: opacity 0.2s;
+    }
+
+    .rule-section.disabled {
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .name-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .name-input-row input[type="text"] {
+      text-transform: none;
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+    }
+
+    .btn-add {
+      flex-shrink: 0;
+      width: 40px;
+      padding: 0;
+      border-radius: 8px;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .name-list {
+      list-style: none;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .name-list::-webkit-scrollbar { width: 4px; }
+    .name-list::-webkit-scrollbar-thumb { background: #3c4043; border-radius: 4px; }
+
+    .name-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 10px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+      background: #292a2d;
+      font-size: 13px;
+    }
+
+    .name-item .name-text { flex: 1; }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #f28b82;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 0 0 8px;
+      flex: none;
+      line-height: 1;
+    }
+
+    .btn-remove:hover { color: #ee675c; }
+
+    .empty-list {
+      font-size: 12px;
+      color: #5f6368;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .rule-description {
+      font-size: 12px;
+      color: #9aa0a6;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>Google Chat Alert</h1>
+    <label class="switch">
+      <input type="checkbox" id="enabledToggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="geral">Geral</button>
+    <button class="tab" data-tab="regras">Regras</button>
+  </div>
+
+  <!-- Tab: Geral -->
+  <div class="tab-content active" id="tab-geral">
+    <div class="section-label">Cor de alerta</div>
+    <div class="color-row">
+      <input type="color" id="colorPicker" value="#750000">
+      <input type="text" id="hexInput" value="#750000" maxlength="7" placeholder="#750000">
+    </div>
+    <div class="preview" id="preview"></div>
+
+    <hr class="separator">
+
+    <div class="toggle-row">
+      <span class="toggle-label">Piscar ao receber mensagem</span>
+      <label class="switch">
+        <input type="checkbox" id="blinkToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="buttons">
+      <button id="btnReset" class="btn-secondary">Resetar</button>
+      <button id="btnSave" class="btn-primary">Salvar</button>
+    </div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <!-- Tab: Regras -->
+  <div class="tab-content" id="tab-regras">
+    <div class="toggle-row">
+      <span class="toggle-label">Habilitar regras</span>
+      <label class="switch">
+        <input type="checkbox" id="rulesEnabledToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <hr class="separator">
+
+    <!-- Excluir -->
+    <div class="rule-section" id="excludeSection">
+      <div class="toggle-row" style="margin-bottom: 8px;">
+        <span class="toggle-label">Excluir</span>
+        <label class="switch">
+          <input type="checkbox" id="excludeToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <p class="rule-description">Mensagens dessas pessoas <strong>não</strong> ativam o alerta.</p>
+      <div class="name-input-row">
+        <input type="text" id="excludeInput" placeholder="Nome da pessoa">
+        <button class="btn-add btn-primary" id="btnAddExclude">+</button>
+      </div>
+      <ul class="name-list" id="excludeList"></ul>
+    </div>
+
+    <hr class="separator">
+
+    <!-- VIP -->
+    <div class="rule-section" id="vipSection">
+      <div class="toggle-row" style="margin-bottom: 8px;">
+        <span class="toggle-label">VIP</span>
+        <label class="switch">
+          <input type="checkbox" id="vipToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <p class="rule-description"><strong>Somente</strong> mensagens dessas pessoas ativam o alerta.</p>
+      <div class="name-input-row">
+        <input type="text" id="vipInput" placeholder="Nome da pessoa">
+        <button class="btn-add btn-primary" id="btnAddVip">+</button>
+      </div>
+      <ul class="name-list" id="vipList"></ul>
+    </div>
+
+    <div class="status" id="rulesStatus"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

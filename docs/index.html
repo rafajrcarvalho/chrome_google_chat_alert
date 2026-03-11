@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade - Google Chat Alert</title>
+    <meta name="description" content="Política de Privacidade da extensão Google Chat Alert para Chrome">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .language-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 10px 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #ccc;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .toggle-switch.active {
+            background: #3498db;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        .lang-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .lang-label.active {
+            color: #3498db;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-align: center;
+            width: 100%;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            text-align: center;
+            width: 100%;
+            margin: 5px 0;
+        }
+
+        .content {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+            font-size: 1.5em;
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #34495e;
+            margin: 20px 0 15px 0;
+            font-size: 1.2em;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul {
+            margin: 15px 0 15px 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .summary {
+            background: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .contact-section {
+            background: linear-gradient(120deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+            font-weight: 500;
+        }
+
+        .no-data-icon {
+            font-size: 1.2em;
+            color: #27ae60;
+            margin-right: 8px;
+        }
+
+        .chrome-logo {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: linear-gradient(45deg, #ea4335, #4285f4, #34a853, #fbbc05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Language switching */
+        .lang-pt, .lang-en {
+            transition: opacity 0.3s ease;
+        }
+
+        .lang-en {
+            display: none;
+        }
+
+        body.lang-english .lang-pt {
+            display: none;
+        }
+
+        body.lang-english .lang-en {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header, .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            .language-toggle {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-toggle">
+        <span class="lang-label active" id="pt-label">PT</span>
+        <div class="toggle-switch" id="languageToggle">
+            <div class="toggle-slider"></div>
+        </div>
+        <span class="lang-label" id="en-label">EN</span>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <div class="chrome-logo">🔔</div>
+            <h1 class="lang-pt">Política de Privacidade</h1>
+            <h1 class="lang-en">Privacy Policy</h1>
+            <p class="lang-pt"><strong>Chrome Extension - Google Chat Alert</strong></p>
+            <p class="lang-en"><strong>Chrome Extension - Google Chat Alert</strong></p>
+        </div>
+
+        <div class="content">
+            <!-- PORTUGUÊS -->
+            <div class="lang-pt">
+                <h2>🔒 1. Introdução</h2>
+                <p>Esta Política de Privacidade descreve como a extensão "Google Chat Alert" coleta, usa e protege as informações quando você utiliza nossa extensão do Chrome.</p>
+
+                <h2>📊 2. Informações que Coletamos</h2>
+
+                <h3>🚫 2.1 Dados NÃO Coletados</h3>
+                <div class="highlight">
+                    <p><span class="no-data-icon">✅</span><strong>Nossa extensão NÃO coleta, armazena, transmite ou compartilha nenhum tipo de dados pessoais, incluindo:</strong></p>
+                    <ul>
+                        <li>Informações de identificação pessoal</li>
+                        <li>Dados de navegação</li>
+                        <li>Cookies</li>
+                        <li>Histórico de navegação</li>
+                        <li>Informações de login</li>
+                        <li>Conteúdo de mensagens do Google Chat</li>
+                        <li>Nomes de contatos ou conversas</li>
+                    </ul>
+                </div>
+
+                <h3>💻 2.2 Funcionamento Local</h3>
+                <p>A extensão opera inteiramente no seu navegador local e não envia nenhuma informação para servidores externos.</p>
+
+                <h2>🔑 3. Permissões Utilizadas</h2>
+
+                <h3>3.1 Permissão "storage"</h3>
+                <p>Utilizada exclusivamente para salvar as preferências do usuário (cor de alerta, modo piscar, regras de filtragem e tema detectado) localmente no navegador, para que persistam entre sessões.</p>
+
+                <h3>3.2 Permissão de host (<code>https://chat.google.com/*</code>)</h3>
+                <p>Necessária para injetar o content script e o CSS na página do Google Chat, permitindo detectar mensagens não lidas no DOM e aplicar o alerta visual (mudança de cor de fundo) na área "Início".</p>
+
+                <h2>⚙️ 4. Funcionalidade da Extensão</h2>
+                <p>A extensão adiciona alertas visuais ao Google Chat quando há mensagens não lidas:</p>
+                <ul>
+                    <li>Detecta mensagens não lidas via atributos do DOM (<code>aria-label</code> e título da página)</li>
+                    <li>Muda a cor de fundo da área "Início" para alertar visualmente o usuário</li>
+                    <li>Permite personalizar a cor de alerta, ativar animação pulsante e configurar regras de filtragem (Excluir/VIP)</li>
+                    <li>Detecta automaticamente o tema (dark/light) para aplicar cores adequadas</li>
+                </ul>
+                <p><strong>Todas essas ações são realizadas localmente no seu navegador, sem transmissão de dados.</strong></p>
+
+                <h2>🌐 5. Uso de Dados de Terceiros</h2>
+                <div class="highlight">
+                    <p><strong>A extensão não utiliza:</strong></p>
+                    <ul>
+                        <li>Analytics ou ferramentas de rastreamento</li>
+                        <li>Serviços de terceiros</li>
+                        <li>APIs externas</li>
+                        <li>Conexões de rede</li>
+                    </ul>
+                </div>
+
+                <h2>💾 6. Armazenamento de Dados</h2>
+                <p><strong>A extensão armazena apenas suas preferências de configuração localmente no navegador via <code>chrome.storage</code>:</strong></p>
+                <ul>
+                    <li>Cor de alerta escolhida (por tema)</li>
+                    <li>Estado de ativação da extensão e do modo piscar</li>
+                    <li>Regras de filtragem (nomes para Excluir ou VIP)</li>
+                    <li>Tema detectado (dark/light)</li>
+                </ul>
+                <p>Nenhum dado pessoal, mensagem ou conteúdo de conversa é armazenado.</p>
+
+                <h2>🤝 7. Compartilhamento de Informações</h2>
+                <p>Não compartilhamos nenhuma informação porque não coletamos nenhum dado pessoal. As configurações ficam salvas exclusivamente no seu navegador.</p>
+
+                <h2>🔐 8. Segurança</h2>
+                <p>A extensão é projetada com foco em privacidade:</p>
+                <div class="highlight">
+                    <ul>
+                        <li><span class="badge">Execução Local</span> Exclusivamente local</li>
+                        <li><span class="badge">Zero Transmissão</span> Sem transmissão de dados</li>
+                        <li><span class="badge">Acesso Limitado</span> Apenas chat.google.com</li>
+                        <li><span class="badge">Permissão Mínima</span> Apenas storage</li>
+                        <li><span class="badge">Open Source</span> Código auditável</li>
+                    </ul>
+                </div>
+
+                <h2>📝 9. Alterações nesta Política</h2>
+                <p>Notificaremos sobre mudanças significativas nesta política através de uma atualização da extensão na Chrome Web Store.</p>
+
+                <h2>📧 10. Contato</h2>
+                <div class="contact-section">
+                    <p><strong>Para questões sobre esta Política de Privacidade, entre em contato através de:</strong></p>
+                    <p>📧 rafa17rocha@hotmail.com</p>
+                </div>
+
+                <h2>✅ 11. Conformidade</h2>
+                <p>Esta extensão está em conformidade com:</p>
+                <ul>
+                    <li>Políticas da Chrome Web Store</li>
+                    <li>Regulamentações de privacidade aplicáveis</li>
+                    <li>Termos de serviço do Google Chat</li>
+                </ul>
+
+                <div class="summary">
+                    <h3>📋 Resumo</h3>
+                    <p><strong>O Google Chat Alert é uma extensão de alerta visual que funciona apenas localmente no seu navegador. Não coleta, armazena ou transmite nenhum dado pessoal — apenas salva suas preferências de configuração localmente.</strong></p>
+                </div>
+            </div>
+
+            <!-- ENGLISH -->
+            <div class="lang-en">
+                <h2>🔒 1. Introduction</h2>
+                <p>This Privacy Policy describes how the "Google Chat Alert" extension collects, uses, and protects information when you use our Chrome extension.</p>
+
+                <h2>📊 2. Information We Collect</h2>
+
+                <h3>🚫 2.1 Data NOT Collected</h3>
+                <div class="highlight">
+                    <p><span class="no-data-icon">✅</span><strong>Our extension does NOT collect, store, transmit, or share any type of personal data, including:</strong></p>
+                    <ul>
+                        <li>Personal identification information</li>
+                        <li>Browsing data</li>
+                        <li>Cookies</li>
+                        <li>Browsing history</li>
+                        <li>Login information</li>
+                        <li>Google Chat message content</li>
+                        <li>Contact or conversation names</li>
+                    </ul>
+                </div>
+
+                <h3>💻 2.2 Local Operation</h3>
+                <p>The extension operates entirely in your local browser and does not send any information to external servers.</p>
+
+                <h2>🔑 3. Permissions Used</h2>
+
+                <h3>3.1 "storage" Permission</h3>
+                <p>Used exclusively to save user preferences (alert color, blink mode, filtering rules, and detected theme) locally in the browser, so they persist between sessions.</p>
+
+                <h3>3.2 Host Permission (<code>https://chat.google.com/*</code>)</h3>
+                <p>Required to inject the content script and CSS into the Google Chat page, enabling the detection of unread messages in the DOM and applying the visual alert (background color change) in the "Home" area.</p>
+
+                <h2>⚙️ 4. Extension Functionality</h2>
+                <p>The extension adds visual alerts to Google Chat when there are unread messages:</p>
+                <ul>
+                    <li>Detects unread messages via DOM attributes (<code>aria-label</code> and page title)</li>
+                    <li>Changes the background color of the "Home" area to visually alert the user</li>
+                    <li>Allows customizing the alert color, enabling a blinking animation, and configuring filtering rules (Exclude/VIP)</li>
+                    <li>Automatically detects the theme (dark/light) to apply appropriate colors</li>
+                </ul>
+                <p><strong>All these actions are performed locally in your browser, without data transmission.</strong></p>
+
+                <h2>🌐 5. Third-Party Data Usage</h2>
+                <div class="highlight">
+                    <p><strong>The extension does not use:</strong></p>
+                    <ul>
+                        <li>Analytics or tracking tools</li>
+                        <li>Third-party services</li>
+                        <li>External APIs</li>
+                        <li>Network connections</li>
+                    </ul>
+                </div>
+
+                <h2>💾 6. Data Storage</h2>
+                <p><strong>The extension only stores your configuration preferences locally in the browser via <code>chrome.storage</code>:</strong></p>
+                <ul>
+                    <li>Chosen alert color (per theme)</li>
+                    <li>Extension and blink mode activation state</li>
+                    <li>Filtering rules (names for Exclude or VIP)</li>
+                    <li>Detected theme (dark/light)</li>
+                </ul>
+                <p>No personal data, messages, or conversation content is stored.</p>
+
+                <h2>🤝 7. Information Sharing</h2>
+                <p>We do not share any information because we do not collect any personal data. Settings are saved exclusively in your browser.</p>
+
+                <h2>🔐 8. Security</h2>
+                <p>The extension is designed with a focus on privacy:</p>
+                <div class="highlight">
+                    <ul>
+                        <li><span class="badge">Local Execution</span> Exclusively local</li>
+                        <li><span class="badge">Zero Transmission</span> No data transmission</li>
+                        <li><span class="badge">Limited Access</span> Only chat.google.com</li>
+                        <li><span class="badge">Minimal Permission</span> Only storage</li>
+                        <li><span class="badge">Open Source</span> Auditable code</li>
+                    </ul>
+                </div>
+
+                <h2>📝 9. Changes to This Policy</h2>
+                <p>We will notify about significant changes to this policy through an extension update on the Chrome Web Store.</p>
+
+                <h2>📧 10. Contact</h2>
+                <div class="contact-section">
+                    <p><strong>For questions about this Privacy Policy, contact us at:</strong></p>
+                    <p>📧 rafa17rocha@hotmail.com</p>
+                </div>
+
+                <h2>✅ 11. Compliance</h2>
+                <p>This extension complies with:</p>
+                <ul>
+                    <li>Chrome Web Store policies</li>
+                    <li>Applicable privacy regulations</li>
+                    <li>Google Chat terms of service</li>
+                </ul>
+
+                <div class="summary">
+                    <h3>📋 Summary</h3>
+                    <p><strong>Google Chat Alert is a visual alert extension that works only locally in your browser. It does not collect, store, or transmit any personal data — it only saves your configuration preferences locally.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p class="lang-pt">2025 - Chrome Extension Google Chat Alert</p>
+            <p class="lang-en">2025 - Chrome Extension Google Chat Alert</p>
+        </div>
+    </div>
+
+    <script>
+        const toggleSwitch = document.getElementById('languageToggle');
+        const ptLabel = document.getElementById('pt-label');
+        const enLabel = document.getElementById('en-label');
+        const body = document.body;
+
+        // Load saved language preference
+        const savedLang = localStorage.getItem('preferredLanguage') || 'pt';
+        if (savedLang === 'en') {
+            switchToEnglish();
+        }
+
+        toggleSwitch.addEventListener('click', function() {
+            if (body.classList.contains('lang-english')) {
+                switchToPortuguese();
+            } else {
+                switchToEnglish();
+            }
+        });
+
+        function switchToEnglish() {
+            body.classList.add('lang-english');
+            toggleSwitch.classList.add('active');
+            ptLabel.classList.remove('active');
+            enLabel.classList.add('active');
+            document.documentElement.lang = 'en';
+            localStorage.setItem('preferredLanguage', 'en');
+        }
+
+        function switchToPortuguese() {
+            body.classList.remove('lang-english');
+            toggleSwitch.classList.remove('active');
+            ptLabel.classList.add('active');
+            enLabel.classList.remove('active');
+            document.documentElement.lang = 'pt-BR';
+            localStorage.setItem('preferredLanguage', 'pt');
+        }
+    </script>
+</body>
+</html>
